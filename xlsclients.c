@@ -26,26 +26,36 @@ in this Software without prior written authorization from The Open Group.
  * *
  * Author:  Jim Fulton, MIT X Consortium
  */
+/* $XFree86: xc/programs/xlsclients/xlsclients.c,v 1.6 2001/12/14 20:02:09 dawes Exp $ */
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <ctype.h>
 #include <X11/Xos.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
+#include <X11/Xmu/WinUtil.h>
 
 char *ProgramName;
 
-static void usage ()
+static void lookat ( Display *dpy, Window root, Bool verbose, int maxcmdlen );
+static void print_client_properties ( Display *dpy, Window w, 
+				      Bool verbose, int maxcmdlen );
+static void print_text_field ( Display *dpy, char *s, XTextProperty *tp );
+static int print_quoted_word ( char *s, int maxlen );
+static void unknown ( Display *dpy, Atom actual_type, int actual_format );
+
+static void 
+usage(void)
 {
     fprintf (stderr,
 	     "usage:  %s  [-display dpy] [-m len] [-[a][l]]\n", ProgramName);
     exit (1);
 }
 
-main (argc, argv)
-    int argc;
-    char **argv;
+int
+main(int argc, char *argv[])
 {
     int i;
     char *displayname = NULL;
@@ -109,11 +119,8 @@ main (argc, argv)
     exit (0);
 }
 
-lookat (dpy, root, verbose, maxcmdlen)
-    Display *dpy;
-    Window root;
-    Bool verbose;
-    int maxcmdlen;
+static void
+lookat(Display *dpy, Window root, Bool verbose, int maxcmdlen)
 {
     Window dummy, *children = NULL, client;
     unsigned int i, nchildren = 0;
@@ -141,11 +148,8 @@ lookat (dpy, root, verbose, maxcmdlen)
 
 static char *Nil = "(nil)";
 
-print_client_properties (dpy, w, verbose, maxcmdlen)
-    Display *dpy;
-    Window w;
-    Bool verbose;
-    int maxcmdlen;
+static void
+print_client_properties(Display *dpy, Window w, Bool verbose, int maxcmdlen)
 {
     char **cliargv = NULL;
     int i, cliargc;
@@ -223,11 +227,8 @@ print_client_properties (dpy, w, verbose, maxcmdlen)
     }
 }
 
-
-print_text_field (dpy, s, tp)
-    Display *dpy;
-    char *s;
-    XTextProperty *tp;
+static void
+print_text_field(Display *dpy, char *s, XTextProperty *tp)
 {
     if (tp->encoding == None || tp->format == 0) {
 	printf ("''");
@@ -244,10 +245,9 @@ print_text_field (dpy, s, tp)
 }
 
 /* returns the number of characters printed */
-int
-print_quoted_word (s, maxlen)
-    char *s;
-    int maxlen;			/* max number of chars we can print */
+static int
+print_quoted_word(char *s, 
+		  int maxlen)		/* max number of chars we can print */
 {
     register char *cp;
     Bool need_quote = False, in_quote = False;
@@ -302,10 +302,8 @@ print_quoted_word (s, maxlen)
     return charsprinted;
 }
 
-unknown (dpy, actual_type, actual_format)
-    Display *dpy;
-    Atom actual_type;
-    int actual_format;
+static void
+unknown(Display *dpy, Atom actual_type, int actual_format)
 {
     char *s;
 
