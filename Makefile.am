@@ -21,8 +21,8 @@
 
 bin_PROGRAMS = xlsclients
 
-xlsclients_CFLAGS = $(DEP_CFLAGS)
-xlsclients_LDADD = $(DEP_LIBS)
+xlsclients_CFLAGS = $(XLSCLIENTS_CFLAGS)
+xlsclients_LDADD = $(XLSCLIENTS_LIBS)
 
 xlsclients_SOURCES =	\
         xlsclients.c
