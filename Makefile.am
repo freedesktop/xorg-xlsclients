@@ -27,6 +27,6 @@ xlsclients_LDADD = $(XLSCLIENTS_LIBS)
 xlsclients_SOURCES =	\
         xlsclients.c
 
-dist_man_MANS = \
+dist_man1_MANS = \
         xlscli.man
 
