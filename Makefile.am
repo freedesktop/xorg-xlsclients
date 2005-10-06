@@ -28,5 +28,5 @@ xlsclients_SOURCES =	\
         xlsclients.c
 
 dist_man1_MANS = \
-        xlscli.man
+        xlsclients.man
 
