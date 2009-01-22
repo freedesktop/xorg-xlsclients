@@ -18,3 +18,7 @@ stamp-h1
 xlsclients
 xlsclients.1
 *~
+*.o
+xlsclients-*.tar.*
+ChangeLog
+tags
