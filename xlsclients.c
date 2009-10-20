@@ -37,6 +37,9 @@ in this Software without prior written authorization from The Open Group.
 #include <xcb/xcb.h>
 #include <xcb/xproto.h>
 #include <xcb/xcb_atom.h>
+#ifndef HAVE_STRNLEN
+#include "strnlen.h"
+#endif
 
 static char *ProgramName;
 

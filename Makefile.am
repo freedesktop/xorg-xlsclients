@@ -22,7 +22,7 @@
 bin_PROGRAMS = xlsclients
 
 AM_CFLAGS = $(CWARNFLAGS) $(XLSCLIENTS_CFLAGS)
-xlsclients_LDADD = $(XLSCLIENTS_LIBS)
+xlsclients_LDADD = $(XLSCLIENTS_LIBS) $(LIBOBJS)
 
 xlsclients_SOURCES =	\
         xlsclients.c

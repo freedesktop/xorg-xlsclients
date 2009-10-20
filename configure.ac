@@ -39,6 +39,9 @@ AC_PROG_INSTALL
 # Check for functional strnlen
 AC_USE_SYSTEM_EXTENSIONS
 AC_FUNC_STRNLEN
+if test "x$ac_cv_func_strnlen_working" = xyes; then
+  AC_DEFINE(HAVE_STRNLEN, 1, [Define to 1 if you have a working strnlen function.])
+fi
 
 XORG_DEFAULT_OPTIONS
 
