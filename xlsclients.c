@@ -189,7 +189,7 @@ main(int argc, char *argv[])
     }
 
     dpy = xcb_connect(displayname, &screen_number);
-    if (!dpy) {
+    if (xcb_connection_has_error(dpy)) {
 	char *name = displayname;
 	if (!name)
 	    name = getenv("DISPLAY");
