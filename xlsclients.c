@@ -34,11 +34,19 @@ in this Software without prior written authorization from The Open Group.
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <inttypes.h>
 #include <xcb/xcb.h>
 #include <xcb/xproto.h>
 #include <xcb/xcb_atom.h>
 #ifndef HAVE_STRNLEN
 #include "strnlen.h"
+#endif
+
+#ifndef PRIx32
+#define PRIx32 "x"
+#endif
+#ifndef PRIu32
+#define PRIu32 "u"
 #endif
 
 static char *ProgramName;
@@ -442,7 +450,7 @@ show_client_properties(void *closure)
      * do header information
      */
     if (cs->verbose) {
-	printf ("Window 0x%lx:\n", cs->w);
+	printf ("Window 0x%" PRIx32 ":\n", cs->w);
 	print_text_field (cs->c, "  Machine:  ", client_machine);
 	if (name && name->type)
 	    print_text_field (cs->c, "  Name:  ", name);
@@ -645,5 +653,5 @@ unknown(xcb_connection_t *dpy, xcb_atom_t actual_type, int actual_format)
 	} else
 	    fputs (Nil, stdout);
     }
-    printf (" (%ld) or format %d>", actual_type, actual_format);
+    printf (" (%" PRIu32 ") or format %d>", actual_type, actual_format);
 }
