@@ -74,4 +74,4 @@ ChangeLog:
 
 dist-hook: ChangeLog INSTALL
 
-EXTRA_DIST = strnlen.h
+EXTRA_DIST += strnlen.h
