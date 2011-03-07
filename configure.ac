@@ -45,7 +45,7 @@ fi
 XORG_DEFAULT_OPTIONS
 
 # Checks for pkg-config packages
-PKG_CHECK_MODULES(XLSCLIENTS, xcb xcb-atom)
+PKG_CHECK_MODULES(XLSCLIENTS, xcb)
 
 AC_CONFIG_FILES([
 	Makefile
