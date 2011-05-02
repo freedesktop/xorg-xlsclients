@@ -45,7 +45,7 @@ fi
 XORG_DEFAULT_OPTIONS
 
 # Checks for pkg-config packages
-PKG_CHECK_MODULES(XLSCLIENTS, xcb)
+PKG_CHECK_MODULES(XLSCLIENTS, xcb >= 1.6)
 
 AC_CONFIG_FILES([
 	Makefile
