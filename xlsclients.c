@@ -247,23 +247,23 @@ static void child_info(void *closure)
     int i, j;
 
     int child_count, num_rep;
-    xcb_query_tree_reply_t **reply;
+    xcb_query_tree_reply_t **qt_reply;
 
     for (i = 0; i < cs->list_length; i++) {
-	xcb_get_property_reply_t *reply;
-	reply = xcb_get_property_reply(c, cs->prop_cookie[i], NULL);
-	if (reply) {
-	    if (reply->type) {
+	xcb_get_property_reply_t *gp_reply;
+	gp_reply = xcb_get_property_reply(c, cs->prop_cookie[i], NULL);
+	if (gp_reply) {
+	    if (gp_reply->type) {
 		/* Show information for this window */
 		print_client_properties(c, cs->win[i], cs->verbose, cs->maxcmdlen);
 
-		free(reply);
+		free(gp_reply);
 
 		/* drain stale replies */
 		for (j = i+1; j < cs->list_length; j++) {
-		    reply = xcb_get_property_reply(c, cs->prop_cookie[j], NULL);
-		    if (reply)
-			free(reply);
+		    gp_reply = xcb_get_property_reply(c, cs->prop_cookie[j], NULL);
+		    if (gp_reply)
+			free(gp_reply);
 		}
 		for (j = 0; j < cs->list_length; j++) {
 		    xcb_query_tree_reply_t *rep;
@@ -273,25 +273,25 @@ static void child_info(void *closure)
 		}
 		goto done;
 	    }
-	    free(reply);
+	    free(gp_reply);
 	}
     }
 
     /* WM_STATE not found. Recurse into children: */
     num_rep = 0;
-    reply = malloc(sizeof(*reply) * cs->list_length);
-    if (!reply)
+    qt_reply = malloc(sizeof(*qt_reply) * cs->list_length);
+    if (!qt_reply)
 	goto done; /* TODO: print OOM message, drain reply queue */
 
     for (i = 0; i < cs->list_length; i++) {
-	reply[num_rep] = xcb_query_tree_reply(c, cs->tree_cookie[i], NULL);
-	if (reply[num_rep])
+	qt_reply[num_rep] = xcb_query_tree_reply(c, cs->tree_cookie[i], NULL);
+	if (qt_reply[num_rep])
 	    num_rep++;
     }
 
     child_count = 0;
     for (i = 0; i < num_rep; i++)
-	child_count += reply[i]->children_len;
+	child_count += qt_reply[i]->children_len;
 
     if (!child_count) {
 	/* No children have CS_STATE; try the parent window */
@@ -314,8 +314,8 @@ static void child_info(void *closure)
 
     child_count = 0;
     for (i = 0; i < num_rep; i++) {
-	xcb_window_t *child = xcb_query_tree_children(reply[i]);
-	for (j = 0; j < reply[i]->children_len; j++) {
+	xcb_window_t *child = xcb_query_tree_children(qt_reply[i]);
+	for (j = 0; j < qt_reply[i]->children_len; j++) {
 	    cs->win[child_count] = child[j];
 	    cs->prop_cookie[child_count] = xcb_get_property(c, 0, child[j],
 			    WM_STATE, XCB_GET_PROPERTY_TYPE_ANY,
@@ -329,8 +329,8 @@ static void child_info(void *closure)
 
 reply_done:
     for (i = 0; i < num_rep; i++)
-	free(reply[i]);
-    free(reply);
+	free(qt_reply[i]);
+    free(qt_reply);
 
 done:
     free(closure);
