@@ -68,7 +68,8 @@ static void
 usage(void)
 {
     fprintf (stderr,
-	     "usage:  %s  [-display dpy] [-m len] [-[a][l]]\n", ProgramName);
+	     "usage:  %s  [-display dpy] [-m len] [-[a][l]] [-version]\n",
+	     ProgramName);
     exit (1);
 }
 
@@ -168,6 +169,9 @@ main(int argc, char *argv[])
 		if (++i >= argc) usage ();
 		maxcmdlen = atoi (argv[i]);
 		continue;
+	      case 'v':			/* -version */
+		printf("%s\n", PACKAGE_STRING);
+		exit(0);
 	    }
 
 	    for (cp = &arg[1]; *cp; cp++) {
