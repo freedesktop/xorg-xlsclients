@@ -55,7 +55,7 @@ static xcb_atom_t WM_STATE;
 static void lookat (xcb_connection_t *dpy, xcb_window_t root, int verbose, int maxcmdlen);
 static void print_client_properties (xcb_connection_t *dpy, xcb_window_t w,
 				     int verbose, int maxcmdlen );
-static void print_text_field (xcb_connection_t *dpy, char *s, xcb_get_property_reply_t *tp );
+static void print_text_field (xcb_connection_t *dpy, const char *s, xcb_get_property_reply_t *tp );
 static int print_quoted_word (char *s, int maxlen);
 static void unknown (xcb_connection_t *dpy, xcb_atom_t actual_type, int actual_format );
 
@@ -193,7 +193,7 @@ main(int argc, char *argv[])
 
     dpy = xcb_connect(displayname, &screen_number);
     if (xcb_connection_has_error(dpy)) {
-	char *name = displayname;
+	const char *name = displayname;
 	if (!name)
 	    name = getenv("DISPLAY");
 	if (!name)
@@ -408,7 +408,7 @@ lookat(xcb_connection_t *dpy, xcb_window_t root, int verbose, int maxcmdlen)
     enqueue(root_list, rl);
 }
 
-static char *Nil = "(nil)";
+static const char *Nil = "(nil)";
 
 typedef struct {
     xcb_connection_t *c;
@@ -491,7 +491,7 @@ show_client_properties(void *closure)
      */
     if (cs->verbose) {
 	if (wm_class && wm_class->type) {
-	    char *res_name, *res_class;
+	    const char *res_name, *res_class;
 	    int name_len, class_len;
 	    res_name = xcb_get_property_value(wm_class);
 	    name_len = strnlen(res_name, wm_class->value_len) + 1;
@@ -564,7 +564,7 @@ print_client_properties(xcb_connection_t *dpy, xcb_window_t w, int verbose, int 
 }
 
 static void
-print_text_field(xcb_connection_t *dpy, char *s, xcb_get_property_reply_t *tp)
+print_text_field(xcb_connection_t *dpy, const char *s, xcb_get_property_reply_t *tp)
 {
     if (tp->type == XCB_NONE || tp->format == 0) {  /* Or XCB_ATOM_NONE after libxcb 1.5 */
 	printf ("''");
